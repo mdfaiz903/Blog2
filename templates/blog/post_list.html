@@ -1,0 +1,45 @@
+{% extends "../base.html" %}
+{% block title %}
+  All Post
+{% endblock title %}
+{% load humanize %}
+{% block body %}
+<div class="container my-2">
+    <div class="row">
+        <div class="col-md-8 ">
+            {% for data in PostList  %}
+            <div class="card my-2" style="width: 38rem;">
+                <img src="{{data.img.url}}" class="card-img-top mx-auto d-block" alt="{{data.img}}"style="height: 300px; width: 300px;" >
+                
+                <div class="card-body">
+                  <h5 class="card-title">{{data.title}}</h5>
+                  
+                  <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                  <h6 class="card-subtitle mb-2 text-body-secondary">By - <b>{{request.user.username}}</b> Created at - {{data.created_date | naturaltime }}</h6>
+                  <p class="card-text">{{data.content | truncatewords_html:10}}<a href="{% url 'PostDetails' data.id %}" class="card-link"><button class="btn ">Read more</button></a></p>
+                  
+                  
+                </div>
+              </div>
+              {% endfor %}
+        </div>
+        <div class="col-md-4">
+          <div class="card" style="width: 18rem">
+            <div class="card-header">CATEGORIES</div>
+            <ul class="list-group list-group-flush">
+                {% for category in items %}
+                  
+                <li class="list-group-item">{{category.name}}</li>
+                {% endfor %}
+       
+            </ul>
+          </div>
+        </div>
+
+    </div>
+    
+</div>
+    
+
+    
+{% endblock body %}

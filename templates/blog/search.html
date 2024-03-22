@@ -1,0 +1,40 @@
+{% extends "../base.html" %}
+{% block title %}
+  New Category 
+{% endblock title %}
+
+{% load crispy_forms_tags %}
+{% block body %}
+  <div class="container my-2">
+    <div class="row">
+        <div class="col">
+            {% if query %}
+            <div>
+                <div>
+                <!-- check if there is a result in the database-->
+                {% if search_data %}
+                    <!-- loop through search query if there is a result -->
+                    {% for data in search_data %}
+                    <div class="card my-2" style="width: 38rem;">
+                        <img src="{{data.img.url}}" class="card-img-top mx-auto d-block" alt="{{data.img}}"style="height: 300px; width: 300px;" >
+                        
+                        <div class="card-body">
+                        <a href="{% url 'PostDetails' data.id %}" class="card-link">
+                          <h5 class="card-title">{{data.title}}</h5>
+                        </a> 
+                        </div>
+                      </div>
+                    {% endfor %}
+                    <!-- return a message if there are no results found. -->
+                {% else %}
+                    <h3>No search results found</h3>
+                {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <h1>Please enter a search query</h1>
+        {% endif %}
+        </div>
+    </div>
+  </div>
+{% endblock body %}
