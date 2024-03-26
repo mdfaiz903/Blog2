@@ -1,9 +1,10 @@
 from django.shortcuts import render,get_object_or_404,redirect,HttpResponseRedirect
 from.models import Post,Comment
 from django.db.models import Q 
-from . forms import PostForm,PostCreateForm,CategoryForm
+from . forms import PostCreateForm,CategoryForm
 from taggit.models import Tag
 from django.template.defaultfilters import slugify
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # from django.http import HttpResponseRedirect
 # Create your views here.
 
@@ -34,10 +35,22 @@ def PostCreate(request):
 def PostListView(request):
     queryset = Post.objects.all().order_by('-created_date')
     common_tags = Post.tags.most_common()[0:2]
+    paginator = Paginator(queryset, 5)  # 5 items per page
+    page_number = request.GET.get('page')
+    
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger :
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
+
     
     context = {
         'PostList':queryset,
         'common_tags':common_tags,
+        'page_obj':page_obj,
         
         }
     return render(request,'blog/post_list.html',context)
