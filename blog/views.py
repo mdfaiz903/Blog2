@@ -68,7 +68,7 @@ def PostDelete(request,id):
 
 def PostEdit(request,id):
     post_data = get_object_or_404(Post,id=id)
-    form = PostForm(request.POST or None, instance=post_data)
+    form = PostCreateForm(request.POST or None, instance=post_data)
     if form.is_valid():
         form.save()
         return redirect('PostDetails', id= post_data.id)

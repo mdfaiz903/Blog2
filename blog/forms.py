@@ -9,10 +9,7 @@ class PostCreateForm(forms.ModelForm):
         widgets = {
             'tags': TagWidget(attrs={'data-role': 'tagsinput', 'class': 'form-control'}),
         }
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        fields = ('title', 'content', 'category', 'img',)
+
 
 class CategoryForm(forms.ModelForm):
     class Meta:
