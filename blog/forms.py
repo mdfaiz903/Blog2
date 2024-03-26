@@ -1,13 +1,18 @@
 from django import forms
 from . models import Post,Category
+from taggit.forms import TagWidget
+
 class PostCreateForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'content', 'category', 'img', )
+        fields = ('title', 'content', 'category', 'img', 'tags')
+        widgets = {
+            'tags': TagWidget(attrs={'data-role': 'tagsinput', 'class': 'form-control'}),
+        }
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'content', 'category', 'img', )
+        fields = ('title', 'content', 'category', 'img',)
 
 class CategoryForm(forms.ModelForm):
     class Meta:

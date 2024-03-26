@@ -2,6 +2,8 @@ from django.db import models
 # from PIL import Image
 from django.contrib.auth.models import User
 from django.utils.timezone import now
+from taggit.managers import TaggableManager
+
 # Create your models here.
 
 class Category(models.Model):
@@ -16,21 +18,16 @@ class Category(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=150)
     content = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     category = models.ManyToManyField(Category,related_name='post_set')
+    tags = TaggableManager()
     img = models.ImageField(upload_to='post_img/',default='default.jpg')
-  
+    
 
-    # def save(self,*args, **kwargs):
-    #     if self.img:
-    #         img = Image.open(self.img.path)
-    #         if img.height > 300 or img.width>300:
-    #             img_size=(300,300)
-    #             img.thumbnail(img_size)
-    #             img.save(self.img.path)
-    #         super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.title

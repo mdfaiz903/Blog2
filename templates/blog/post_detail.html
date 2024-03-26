@@ -26,7 +26,22 @@
             {% endfor %}
             <p>Last Update - {{ post.last_modified }}</p>
           </h6>
+          <!-- tangs -->
+          
+          <div class="row mb-2">
+      
+                <div class="cards">
+                            <div style="display:flex">
+                              <p>Tags </p>
+                                {% for tag in post.tags.all %}
+                                <a href="" class="mr-1">#{{ tag }}</a>
+                                {% endfor %}
+                            </div>
+                
+            </div>
        
+    </div> 
+          <!-- tangs -->
         <div>
           <a href="{% url 'PostEdit' post.id %}">
             <button type="submit" class="btn btn-primary" >Edit</button>
@@ -100,6 +115,7 @@
       </div>
 
     </div>
+  
   </div>
 </div>
 {% endblock body %}

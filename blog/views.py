@@ -2,6 +2,8 @@ from django.shortcuts import render,get_object_or_404,redirect,HttpResponseRedir
 from.models import Post,Comment
 from django.db.models import Q 
 from . forms import PostForm,PostCreateForm,CategoryForm
+from taggit.models import Tag
+from django.template.defaultfilters import slugify
 # from django.http import HttpResponseRedirect
 # Create your views here.
 
@@ -12,14 +14,18 @@ def searchView(request):
     if request.method == 'POST':
         search_query = request.POST.get('search','')
         search_input = Post.objects.filter(Q(title__icontains = search_query) | Q(content__icontains = search_query) | Q(category__name__icontains = search_query))
-        print(search_input,"+++++++++++++++")
+        
         return render(request,'blog/search.html',{'search_data':search_input,'query':search_query})
     return render(request,'blog/search.html')
 def PostCreate(request):
     if request.method=='POST':
         form = PostCreateForm(request.POST , request.FILES)
         if form.is_valid():
-            form.save()
+            newpost = form.save(commit=False)
+            newpost.slug= slugify(newpost.title)
+            newpost.save()
+            #important
+            form.save_m2m()
             return redirect('postList')
     else:
         form = PostCreateForm()
@@ -27,15 +33,21 @@ def PostCreate(request):
 
 def PostListView(request):
     queryset = Post.objects.all().order_by('-created_date')
-    return render(request,'blog/post_list.html',{'PostList':queryset})
+    common_tags = Post.tags.most_common()[0:2]
+    
+    context = {
+        'PostList':queryset,
+        'common_tags':common_tags,
+        
+        }
+    return render(request,'blog/post_list.html',context)
 
 def PostDetails(request,id):
     
     post_data = Post.objects.get(id=id)
-
+  
     comments = Comment.objects.filter(post=post_data, parent=None)
     replies = Comment.objects.filter(post=post_data).exclude(parent=None)
-
    
     context = {
         'post':post_data,
@@ -91,5 +103,15 @@ def  AddComment(request):
             newcom.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-
+def tagged(request, slug):
+    tag = get_object_or_404(Tag,slug=slug)
+    
+    # Filter posts by tag name  
+    posts = Post.objects.filter(tags=tag)
+    
+    context = {
+        'tag':tag,
+        'posts':posts,
+    }
+    return render(request, 'blog/post_edit.html', context)
 

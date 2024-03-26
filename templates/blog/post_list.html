@@ -18,7 +18,17 @@
                   <h6 class="card-subtitle mb-2 text-body-secondary">By - <b>{{request.user.username}}</b> Created at - {{data.created_date | naturaltime }}</h6>
                   <p class="card-text">{{data.content | truncatewords_html:10}}<a href="{% url 'PostDetails' data.id %}" class="card-link"><button class="btn ">Read more</button></a></p>
                   
-                  
+                         <!-- tags -->
+       <div class="container pt-5">
+     
+        <p>Common Tags: 
+        {% for mt in common_tags %}
+            <a href="#" >{{mt}}</a>
+        {% endfor %}
+        </p>
+     
+    </div> 
+       <!-- tags -->
                 </div>
               </div>
               {% endfor %}
