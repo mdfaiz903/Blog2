@@ -48,6 +48,17 @@
         </li>
 
       </ul>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'change_password'%}">Change Password</a>
+          </li>         
+           <li class="nav-item">
+            <a class="nav-link" href='{% url "logout" %}'>Logout</a>
+          </li>
+        
+      </div>
       <form class="d-flex" role="search" method="post" action="{% url 'searchView' %}" >
         {% csrf_token %}
         <input class="form-control me-2" type="search" placeholder="Search" name="search" aria-label="Search">
@@ -57,6 +68,14 @@
   </div>
 </nav>
 <!-- bootstrap navbar -->
+
+<div class="container">
+  <div class="row py-4">
+      <div class="col-md-12 my-2">
+          <h4>Welcome {{request.user.username}}</h4>
+      </div>
+  </div>
+</div>
     {% block body %}
       
     {% endblock body %}

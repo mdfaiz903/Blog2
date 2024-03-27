@@ -1,8 +1,9 @@
 from django.db import models
 # from PIL import Image
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from django.utils.timezone import now
 from taggit.managers import TaggableManager
+from core import settings
 
 # Create your models here.
 
@@ -33,7 +34,7 @@ class Post(models.Model):
         return self.title
     
 class Comment(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
     text = models.TextField()
     parent = models.ForeignKey('self',on_delete=models.CASCADE, null=True)
